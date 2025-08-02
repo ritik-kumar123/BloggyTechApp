@@ -33,3 +33,39 @@ export const createComment = asyncHandler(async (req, res) => {
     comment,
   });
 });
+
+//@desc Delete Comment
+//@route DELETE /api/v1/comment/:commentId
+//@access private
+
+export const deleteComment = asyncHandler(async (req, res) => {
+  //! Get the comment id to be deleted
+  const commentId = req.params.commentId;
+  await Comment.findByIdAndDelete(commentId);
+  res.status(200).json({
+    status: "success",
+    message: "Comment successfully deleted!",
+  });
+});
+
+//@desc Update Comment
+//@route PUT /api/v1/comment/:commentId
+//@access private
+
+export const updateComment = asyncHandler(async (req, res) => {
+  //! Get the comment id to be Updated
+  const commentId = req.params.commentId;
+  //!Get message
+  const message = req.body.message;
+
+  const UpdateComment = await Comment.findByIdAndUpdate(
+    commentId, 
+    { message },
+    { new: true, runValidators: true }
+  );
+  res.status(200).json({
+    status: "success",
+    message: "Comment successfully Updated!",
+    UpdateComment,
+  });
+});
